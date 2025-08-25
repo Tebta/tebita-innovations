@@ -63,9 +63,9 @@ export function Navigation() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link href="/portfolio" className="text-white hover:text-primary transition-colors">
+            {/* <Link href="/portfolio" className="text-white hover:text-primary transition-colors">
               Portfolio
-            </Link>
+            </Link> */}
             <Link href="/faq" className="text-white hover:text-primary transition-colors">
               FAQ
             </Link>

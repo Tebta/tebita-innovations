@@ -42,7 +42,7 @@ export default function AppointmentsPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="pt-24 pb-16 bg-gradient-to-br from-secondary via-secondary to-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in-left">
@@ -50,10 +50,10 @@ export default function AppointmentsPage() {
                 <Calendar className="h-8 w-8 text-primary mr-3" />
                 <span className="text-primary font-semibold">Appointment Systems</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
+              <h1 className="text-4xl sm:text-5xl font-bold text-background mb-6">
                 Streamline Your Appointment Booking
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              <p className="text-lg text-background mb-8 leading-relaxed">
                 Perfect for doctors, psychologists, consultants, and service providers. Let clients book appointments
                 online while you focus on providing excellent service.
               </p>
@@ -64,14 +64,14 @@ export default function AppointmentsPage() {
                     <ArrowRight className="h-5 w-5" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg">
+                {/* <Button asChild variant="outline" size="lg">
                   <Link href="/portfolio">See Demo</Link>
-                </Button>
+                </Button> */}
               </div>
             </div>
             <div className="animate-fade-in-right">
               <div className="relative">
-                <div className="absolute inset-0 bg-primary/10 rounded-2xl transform rotate-3"></div>
+                <div className="absolute inset-0 bg-primary/50 rounded-2xl transform rotate-3"></div>
                 <div className="relative bg-card rounded-2xl p-8 shadow-lg">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-3 bg-primary/10 rounded-lg">
@@ -149,7 +149,7 @@ export default function AppointmentsPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-x-16 gap-y-6 mx-auto md:max-w-3xl">
             {features.map((feature, index) => (
               <div
                 key={index}

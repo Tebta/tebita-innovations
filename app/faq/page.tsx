@@ -134,17 +134,17 @@ export default function FAQPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="pt-24 pb-16 bg-gradient-to-br from-secondary via-secondary to-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in-up">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-background mb-6">
               Frequently Asked{" "}
               <span className="text-primary relative">
                 Questions
                 <div className="absolute -bottom-2 left-0 right-0 h-1 bg-primary/30 rounded-full"></div>
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
+            <p className="text-lg sm:text-xl text-background max-w-3xl mx-auto leading-relaxed mb-8">
               Find answers to common questions about our services, process, and how we can help transform your business
               with digital solutions.
             </p>
@@ -202,9 +202,9 @@ export default function FAQPage() {
                   <Phone className="h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              {/* <Button asChild variant="outline" size="lg">
                 <Link href="/portfolio">View Our Work</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

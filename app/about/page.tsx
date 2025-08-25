@@ -136,7 +136,7 @@ export default function AboutPage() {
         <div className="relative bg-white rounded-lg shadow-xl overflow-hidden h-full animate-fade-in-right">
           <div className="p-8 h-full flex flex-col">
             <div className="flex items-center mb-6">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 text-sidebar-primary">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-green-100 text-sidebar-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
@@ -327,7 +327,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary text-primary-foreground">
+      <section className="py-20 bg-muted/30 text-primary-background">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in-up">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Start Your Digital Journey?</h2>
@@ -339,18 +339,18 @@ export default function AboutPage() {
                 asChild
                 size="lg"
                 variant="secondary"
-                className="bg-background text-foreground hover:bg-background/90 text-lg px-8 py-6"
+                className="bg-primary text-background hover:bg-background/90 text-lg px-8 py-6"
               >
                 <Link href="/contact">Get Started Today</Link>
               </Button>
-              <Button
+              {/* <Button
                 asChild
                 size="lg"
                 variant="outline"
                 className="border-primary-foreground text-lg px-8 py-6 bg-transparent"
               >
                 <Link href="/portfolio">View Our Work</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

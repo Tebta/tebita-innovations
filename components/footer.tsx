@@ -104,14 +104,14 @@ export function Footer() {
                   About Us
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/portfolio"
                   className="text-secondary-foreground/80 hover:text-secondary-foreground transition-colors"
                 >
                   Portfolio
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/faq"
@@ -155,7 +155,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-secondary-foreground/20 mt-8 pt-8 text-center text-sm text-secondary-foreground/80">
-          <p>&copy; 2024 Tebita Innovations. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Tebita Innovations. All rights reserved.</p>
         </div>
       </div>
     </footer>

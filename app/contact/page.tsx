@@ -43,17 +43,17 @@ export default function ContactPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-24 pb-16 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <section className="pt-24 pb-16 bg-gradient-to-br from-secondary via-secondary to-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in-up">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-background mb-6">
               Let's{" "}
               <span className="text-primary relative">
                 Connect
                 <div className="absolute -bottom-2 left-0 right-0 h-1 bg-primary/30 rounded-full"></div>
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-background max-w-3xl mx-auto leading-relaxed">
               Ready to transform your business with innovative digital solutions? Get in touch and let's discuss how we
               can help you achieve your goals.
             </p>
@@ -68,130 +68,118 @@ export default function ContactPage() {
             {/* Contact Information */}
             <div className="lg:col-span-1 animate-fade-in-left">
               <h2 className="text-2xl font-bold text-foreground mb-6">Get In Touch</h2>
-              <div className="space-y-6">
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <Phone className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Phone</h3>
-                        <p className="text-muted-foreground">+251 911 123 456</p>
-                        <p className="text-muted-foreground">+251 922 654 321</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-4 p-4 rounded-lg border">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Phone className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">Phone</h3>
+                    <p className="text-muted-foreground text-sm">+251 911 123 456</p>
+                    <p className="text-muted-foreground text-sm">+251 922 654 321</p>
+                  </div>
+                </div>
 
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <Mail className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Email</h3>
-                        <p className="text-muted-foreground">info@tebitainnovations.com</p>
-                        <p className="text-muted-foreground">projects@tebitainnovations.com</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div className="flex items-start space-x-4 p-4 rounded-lg border">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Mail className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">Email</h3>
+                    <p className="text-muted-foreground text-sm">info@tebitainnovations.com</p>
+                    <p className="text-muted-foreground text-sm">projects@tebitainnovations.com</p>
+                  </div>
+                </div>
 
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <MapPin className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Office</h3>
-                        <p className="text-muted-foreground">Bole Sub City</p>
-                        <p className="text-muted-foreground">Addis Ababa, Ethiopia</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div className="flex items-start space-x-4 p-4 rounded-lg border">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MapPin className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">Office</h3>
+                    <p className="text-muted-foreground text-sm">Bole Sub City</p>
+                    <p className="text-muted-foreground text-sm">Addis Ababa, Ethiopia</p>
+                  </div>
+                </div>
 
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                        <Clock className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">Business Hours</h3>
-                        <p className="text-muted-foreground">Mon - Fri: 9:00 AM - 6:00 PM</p>
-                        <p className="text-muted-foreground">Sat: 10:00 AM - 4:00 PM</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <div className="flex items-start space-x-4 p-4 rounded-lg border">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Clock className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">Business Hours</h3>
+                    <p className="text-muted-foreground text-sm">Mon - Fri: 9:00 AM - 6:00 PM</p>
+                    <p className="text-muted-foreground text-sm">Sat: 10:00 AM - 4:00 PM</p>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Contact Form */}
             <div className="lg:col-span-2 animate-fade-in-right">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+              <Card className="border-0 shadow-lg">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-2 text-xl">
                     <MessageSquare className="h-5 w-5 text-primary" />
                     Start Your Project
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name">Full Name *</Label>
+                        <Label htmlFor="name" className="text-sm font-medium">Full Name *</Label>
                         <Input
                           id="name"
                           value={formData.name}
                           onChange={(e) => handleInputChange("name", e.target.value)}
                           placeholder="Your full name"
+                          className="py-2 px-3"
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email Address *</Label>
+                        <Label htmlFor="email" className="text-sm font-medium">Email Address *</Label>
                         <Input
                           id="email"
                           type="email"
                           value={formData.email}
                           onChange={(e) => handleInputChange("email", e.target.value)}
                           placeholder="your@email.com"
+                          className="py-2 px-3"
                           required
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Phone Number</Label>
+                        <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
                         <Input
                           id="phone"
                           value={formData.phone}
                           onChange={(e) => handleInputChange("phone", e.target.value)}
                           placeholder="+251 911 123 456"
+                          className="py-2 px-3"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="company">Company/Business Name</Label>
+                        <Label htmlFor="company" className="text-sm font-medium">Company/Business Name</Label>
                         <Input
                           id="company"
                           value={formData.company}
                           onChange={(e) => handleInputChange("company", e.target.value)}
                           placeholder="Your business name"
+                          className="py-2 px-3"
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="service">Service Needed *</Label>
+                        <Label htmlFor="service" className="text-sm font-medium">Service Needed *</Label>
                         <Select value={formData.service} onValueChange={(value) => handleInputChange("service", value)}>
-                          <SelectTrigger>
+                          <SelectTrigger className="py-2 px-3">
                             <SelectValue placeholder="Select a service" />
                           </SelectTrigger>
                           <SelectContent>
@@ -205,9 +193,9 @@ export default function ContactPage() {
                         </Select>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="budget">Budget Range</Label>
+                        <Label htmlFor="budget" className="text-sm font-medium">Budget Range</Label>
                         <Select value={formData.budget} onValueChange={(value) => handleInputChange("budget", value)}>
-                          <SelectTrigger>
+                          <SelectTrigger className="py-2 px-3">
                             <SelectValue placeholder="Select budget range" />
                           </SelectTrigger>
                           <SelectContent>
@@ -222,9 +210,9 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="timeline">Project Timeline</Label>
+                      <Label htmlFor="timeline" className="text-sm font-medium">Project Timeline</Label>
                       <Select value={formData.timeline} onValueChange={(value) => handleInputChange("timeline", value)}>
-                        <SelectTrigger>
+                        <SelectTrigger className="py-2 px-3">
                           <SelectValue placeholder="When do you need this completed?" />
                         </SelectTrigger>
                         <SelectContent>
@@ -238,30 +226,32 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="message">Project Details *</Label>
+                      <Label htmlFor="message" className="text-sm font-medium">Project Details *</Label>
                       <Textarea
                         id="message"
                         value={formData.message}
                         onChange={(e) => handleInputChange("message", e.target.value)}
                         placeholder="Tell us about your project, goals, and any specific requirements..."
-                        rows={5}
+                        rows={4}
+                        className="py-2 px-3"
                         required
                       />
                     </div>
 
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-start space-x-2">
                       <Checkbox
                         id="newsletter"
                         checked={formData.newsletter}
                         onCheckedChange={(checked) => handleInputChange("newsletter", checked as boolean)}
+                        className="mt-1"
                       />
-                      <Label htmlFor="newsletter" className="text-sm">
+                      <Label htmlFor="newsletter" className="text-sm text-muted-foreground leading-tight">
                         Subscribe to our newsletter for web development tips and Ethiopian business insights
                       </Label>
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90">
-                      <Send className="h-5 w-5 mr-2" />
+                    <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 py-2">
+                      <Send className="h-4 w-4 mr-2" />
                       Send Message
                     </Button>
                   </form>
@@ -280,28 +270,28 @@ export default function ContactPage() {
             <p className="text-lg text-muted-foreground">Choose the communication method that works best for you</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="text-center animate-fade-in-up">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="text-center animate-fade-in-up border-0 shadow-md">
               <CardContent className="p-6">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Phone className="h-8 w-8 text-primary" />
+                <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Phone className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Call Us</h3>
-                <p className="text-muted-foreground mb-4">Speak directly with our team for immediate assistance</p>
-                <Button asChild className="bg-primary hover:bg-primary/90">
+                <h3 className="text-lg font-semibold mb-2">Call Us</h3>
+                <p className="text-muted-foreground text-sm mb-4">Speak directly with our team for immediate assistance</p>
+                <Button asChild className="bg-primary hover:bg-primary/90 text-sm py-1">
                   <a href="tel:+251911123456">+251 911 123 456</a>
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="text-center animate-fade-in-up delay-100">
+            <Card className="text-center animate-fade-in-up delay-100 border-0 shadow-md">
               <CardContent className="p-6">
-                <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <MessageSquare className="h-8 w-8 text-accent" />
+                <div className="w-14 h-14 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MessageSquare className="h-6 w-6 text-accent" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">WhatsApp</h3>
-                <p className="text-muted-foreground mb-4">Quick chat for instant responses and project discussions</p>
-                <Button asChild variant="outline">
+                <h3 className="text-lg font-semibold mb-2">WhatsApp</h3>
+                <p className="text-muted-foreground text-sm mb-4">Quick chat for instant responses and project discussions</p>
+                <Button asChild variant="outline" className="text-sm py-1">
                   <a href="https://wa.me/251911123456" target="_blank" rel="noopener noreferrer">
                     Chat on WhatsApp
                   </a>
@@ -309,16 +299,16 @@ export default function ContactPage() {
               </CardContent>
             </Card>
 
-            <Card className="text-center animate-fade-in-up delay-200">
+            <Card className="text-center animate-fade-in-up delay-200 border-0 shadow-md">
               <CardContent className="p-6">
-                <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Mail className="h-8 w-8 text-secondary" />
+                <div className="w-14 h-14 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Mail className="h-6 w-6 text-secondary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Email</h3>
-                <p className="text-muted-foreground mb-4">
+                <h3 className="text-lg font-semibold mb-2">Email</h3>
+                <p className="text-muted-foreground text-sm mb-4">
                   Send detailed project requirements and get a comprehensive response
                 </p>
-                <Button asChild variant="outline">
+                <Button asChild variant="outline" className="text-sm py-1">
                   <a href="mailto:info@tebitainnovations.com">Send Email</a>
                 </Button>
               </CardContent>
