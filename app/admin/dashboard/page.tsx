@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { getContactSubmissions, type ContactSubmission } from "@/lib/auth"
+import { authenticatedFetch } from "@/lib/auth"
 import { Counter } from "@/components/counter"
 import { ProgressBar } from "@/components/progress-bar"
 import {
@@ -23,27 +23,127 @@ import {
   TrendingUp,
   Users,
   MessageSquare,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react"
 
+interface Submission {
+  id: number
+  name: string
+  email: string
+  phone: string
+  company: string
+  service: string
+  budget: string
+  timeline: string
+  message: string
+  newsletter: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+interface AnalyticsOverview {
+  totalSubmissions: number
+  thisMonthSubmissions: number
+  lastMonthSubmissions: number
+  monthlyGrowth: number
+  serviceDistribution: Record<string, number>
+}
+
+interface MonthlyStat {
+  month: string
+  count: number
+}
+
+interface ServiceStat {
+  service: string
+  count: string
+}
+
+interface SubmissionsResponse {
+  submissions: Submission[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    pages: number
+  }
+}
+
 export default function AdminDashboard() {
-  const [submissions, setSubmissions] = useState<ContactSubmission[]>([])
-  const [filteredSubmissions, setFilteredSubmissions] = useState<ContactSubmission[]>([])
+  const [submissions, setSubmissions] = useState<Submission[]>([])
+  const [filteredSubmissions, setFilteredSubmissions] = useState<Submission[]>([])
+  const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null)
+  const [monthlyStats, setMonthlyStats] = useState<MonthlyStat[]>([])
+  const [serviceStats, setServiceStats] = useState<ServiceStat[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [serviceFilter, setServiceFilter] = useState("all")
-  const [selectedSubmission, setSelectedSubmission] = useState<ContactSubmission | null>(null)
+  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const loadSubmissions = () => {
-      const data = getContactSubmissions()
-      setSubmissions(data)
-      setFilteredSubmissions(data)
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        await Promise.all([
+          fetchSubmissions(),
+          fetchAnalytics(),
+          fetchMonthlyStats(),
+          fetchServiceStats()
+        ])
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    loadSubmissions()
+    fetchData()
     // Refresh data every 30 seconds
-    const interval = setInterval(loadSubmissions, 30000)
+    const interval = setInterval(fetchData, 30000)
     return () => clearInterval(interval)
   }, [])
+
+  const fetchSubmissions = async () => {
+    try {
+      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/submissions")
+      const data: SubmissionsResponse = await response.json()
+      setSubmissions(data.submissions)
+      setFilteredSubmissions(data.submissions)
+    } catch (error) {
+      console.error("Error fetching submissions:", error)
+    }
+  }
+
+  const fetchAnalytics = async () => {
+    try {
+      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/analytics/overview")
+      const data: AnalyticsOverview = await response.json()
+      setAnalytics(data)
+    } catch (error) {
+      console.error("Error fetching analytics:", error)
+    }
+  }
+
+  const fetchMonthlyStats = async () => {
+    try {
+      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/analytics/monthly-stats")
+      const data: MonthlyStat[] = await response.json()
+      setMonthlyStats(data)
+    } catch (error) {
+      console.error("Error fetching monthly stats:", error)
+    }
+  }
+
+  const fetchServiceStats = async () => {
+    try {
+      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/analytics/service-stats")
+      const data: ServiceStat[] = await response.json()
+      setServiceStats(data)
+    } catch (error) {
+      console.error("Error fetching service stats:", error)
+    }
+  }
 
   useEffect(() => {
     let filtered = submissions
@@ -65,18 +165,12 @@ export default function AdminDashboard() {
   }, [submissions, searchTerm, serviceFilter])
 
   const getServiceStats = () => {
-    const stats = submissions.reduce(
-      (acc, submission) => {
-        acc[submission.service] = (acc[submission.service] || 0) + 1
-        return acc
-      },
-      {} as Record<string, number>,
-    )
-
-    return Object.entries(stats).map(([service, count]) => ({
+    if (!analytics) return [];
+    
+    return Object.entries(analytics.serviceDistribution).map(([service, count]) => ({
       service,
       count,
-      percentage: (count / submissions.length) * 100,
+      percentage: (count / analytics.totalSubmissions) * 100,
     }))
   }
 
@@ -97,7 +191,7 @@ export default function AdminDashboard() {
   }
 
   const exportToCSV = () => {
-    const headers = ["Name", "Email", "Phone", "Company", "Service", "Budget", "Message", "Submitted At"]
+    const headers = ["Name", "Email", "Phone", "Company", "Service", "Budget", "Timeline", "Message", "Submitted At"]
     const csvContent = [
       headers.join(","),
       ...filteredSubmissions.map((submission) =>
@@ -108,8 +202,9 @@ export default function AdminDashboard() {
           submission.company,
           submission.service,
           submission.budget,
+          submission.timeline,
           `"${submission.message.replace(/"/g, '""')}"`,
-          new Date(submission.submittedAt).toLocaleString(),
+          new Date(submission.createdAt).toLocaleString(),
         ].join(","),
       ),
     ].join("\n")
@@ -121,6 +216,34 @@ export default function AdminDashboard() {
     a.download = `contact-submissions-${new Date().toISOString().split("T")[0]}.csv`
     a.click()
     window.URL.revokeObjectURL(url)
+  }
+
+  const formatServiceName = (service: string) => {
+    const serviceMap: Record<string, string> = {
+      "ecommerce": "E-commerce Website",
+      "landing": "Landing Page",
+      "appointment": "Appointment System",
+      "ordering": "Online Ordering System",
+      "consultation": "Free Consultation",
+      "other": "Other"
+    }
+    
+    return serviceMap[service] || service.charAt(0).toUpperCase() + service.slice(1)
+  }
+
+  if (isLoading) {
+    return (
+      <AdminGuard>
+        <div className="min-h-screen bg-gray-50">
+          <AdminHeader />
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            </div>
+          </main>
+        </div>
+      </AdminGuard>
+    )
   }
 
   return (
@@ -136,7 +259,10 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-teal-600">Total Submissions</p>
-                    <Counter end={submissions.length} className="text-3xl font-bold text-teal-900" />
+                    <Counter 
+                      end={analytics?.totalSubmissions || 0} 
+                      className="text-3xl font-bold text-teal-900" 
+                    />
                   </div>
                   <MessageSquare className="w-8 h-8 text-primary" />
                 </div>
@@ -149,13 +275,24 @@ export default function AdminDashboard() {
                   <div>
                     <p className="text-sm font-medium text-blue-600">This Month</p>
                     <Counter
-                      end={
-                        submissions.filter((s) => new Date(s.submittedAt).getMonth() === new Date().getMonth()).length
-                      }
+                      end={analytics?.thisMonthSubmissions || 0}
                       className="text-3xl font-bold text-blue-900"
                     />
                   </div>
-                  <TrendingUp className="w-8 h-8 text-blue-500" />
+                  <div className="flex items-center">
+                    <TrendingUp className="w-8 h-8 text-blue-500" />
+                    {analytics && analytics.monthlyGrowth > 0 ? (
+                      <span className="ml-2 text-sm font-medium text-green-600 flex items-center">
+                        <ArrowUp className="w-4 h-4 mr-1" />
+                        {analytics.monthlyGrowth}%
+                      </span>
+                    ) : analytics && analytics.monthlyGrowth < 0 ? (
+                      <span className="ml-2 text-sm font-medium text-red-600 flex items-center">
+                        <ArrowDown className="w-4 h-4 mr-1" />
+                        {Math.abs(analytics.monthlyGrowth)}%
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -179,8 +316,10 @@ export default function AdminDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-purple-600">Avg. Response Time</p>
-                    <div className="text-3xl font-bold text-purple-900">2.4h</div>
+                    <p className="text-sm font-medium text-purple-600">Last Month</p>
+                    <div className="text-3xl font-bold text-purple-900">
+                      {analytics?.lastMonthSubmissions || 0}
+                    </div>
                   </div>
                   <Users className="w-8 h-8 text-purple-500" />
                 </div>
@@ -196,17 +335,26 @@ export default function AdminDashboard() {
                 <CardDescription>Breakdown of requested services</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {getServiceStats().map(({ service, count, percentage }) => (
-                  <div key={service} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-medium text-teal-800">{service}</span>
-                      <span className="text-teal-600">
-                        {count} ({percentage.toFixed(1)}%)
-                      </span>
-                    </div>
-                    <ProgressBar progress={percentage} className="h-2" />
+                {serviceStats.length > 0 ? (
+                  serviceStats.map(({ service, count }) => {
+                    const percentage = analytics ? (parseInt(count) / analytics.totalSubmissions) * 100 : 0
+                    return (
+                      <div key={service} className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="font-medium text-teal-800">{formatServiceName(service)}</span>
+                          <span className="text-teal-600">
+                            {count} ({percentage.toFixed(1)}%)
+                          </span>
+                        </div>
+                        <ProgressBar progress={percentage} className="h-2" />
+                      </div>
+                    )
+                  })
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    No service data available
                   </div>
-                ))}
+                )}
               </CardContent>
             </Card>
 
@@ -216,17 +364,23 @@ export default function AdminDashboard() {
                 <CardDescription>Client budget preferences</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {getBudgetStats().map(({ budget, count, percentage }) => (
-                  <div key={budget} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="font-medium text-teal-800">{budget}</span>
-                      <span className="text-teal-600">
-                        {count} ({percentage.toFixed(1)}%)
-                      </span>
+                {getBudgetStats().length > 0 ? (
+                  getBudgetStats().map(({ budget, count, percentage }) => (
+                    <div key={budget} className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="font-medium text-teal-800">{budget}</span>
+                        <span className="text-teal-600">
+                          {count} ({percentage.toFixed(1)}%)
+                        </span>
+                      </div>
+                      <ProgressBar progress={percentage} className="h-2" />
                     </div>
-                    <ProgressBar progress={percentage} className="h-2" />
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    No budget data available
                   </div>
-                ))}
+                )}
               </CardContent>
             </Card>
           </div>
@@ -239,7 +393,7 @@ export default function AdminDashboard() {
                   <CardTitle className="text-teal-900">Contact Submissions</CardTitle>
                   <CardDescription>Manage and review client inquiries</CardDescription>
                 </div>
-                <Button onClick={exportToCSV} variant="outline" className="w-fit bg-transparent">
+                <Button onClick={exportToCSV} variant="outline" className="w-fit bg-transparent" disabled={submissions.length === 0}>
                   <Download className="w-4 h-4 mr-2" />
                   Export CSV
                 </Button>
@@ -265,10 +419,11 @@ export default function AdminDashboard() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Services</SelectItem>
-                    <SelectItem value="E-commerce Website">E-commerce Website</SelectItem>
-                    <SelectItem value="Project Showcase">Project Showcase</SelectItem>
-                    <SelectItem value="Appointment System">Appointment System</SelectItem>
-                    <SelectItem value="Online Ordering">Online Ordering</SelectItem>
+                    {serviceStats.map(({ service }) => (
+                      <SelectItem key={service} value={service}>
+                        {formatServiceName(service)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -294,7 +449,7 @@ export default function AdminDashboard() {
                             <div className="flex flex-wrap items-center gap-3">
                               <h3 className="font-semibold text-teal-900">{submission.name}</h3>
                               <Badge variant="secondary" className="bg-primary/10 text-primary">
-                                {submission.service}
+                                {formatServiceName(submission.service)}
                               </Badge>
                               <Badge variant="outline" className="text-teal-600">
                                 {submission.budget}
@@ -318,7 +473,7 @@ export default function AdminDashboard() {
 
                             <div className="flex items-center gap-2 text-sm text-gray-500">
                               <Calendar className="w-4 h-4" />
-                              <span>{new Date(submission.submittedAt).toLocaleString()}</span>
+                              <span>{new Date(submission.createdAt).toLocaleString()}</span>
                             </div>
                           </div>
 
@@ -370,11 +525,19 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-teal-800">Service</label>
-                    <p className="text-gray-900">{selectedSubmission.service}</p>
+                    <p className="text-gray-900">{formatServiceName(selectedSubmission.service)}</p>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-teal-800">Budget</label>
                     <p className="text-gray-900">{selectedSubmission.budget}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-teal-800">Timeline</label>
+                    <p className="text-gray-900">{selectedSubmission.timeline}</p>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-teal-800">Newsletter</label>
+                    <p className="text-gray-900">{selectedSubmission.newsletter ? "Subscribed" : "Not Subscribed"}</p>
                   </div>
                 </div>
 
@@ -385,7 +548,11 @@ export default function AdminDashboard() {
 
                 <div>
                   <label className="text-sm font-medium text-teal-800">Submitted At</label>
-                  <p className="text-gray-900">{new Date(selectedSubmission.submittedAt).toLocaleString()}</p>
+                  <p className="text-gray-900">{new Date(selectedSubmission.createdAt).toLocaleString()}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-teal-800">Last Updated</label>
+                  <p className="text-gray-900">{new Date(selectedSubmission.updatedAt).toLocaleString()}</p>
                 </div>
               </CardContent>
             </Card>

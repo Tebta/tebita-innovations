@@ -9,11 +9,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { authenticateUser, generateToken, setStoredToken } from "@/lib/auth"
-import { Eye, EyeOff, Lock, User } from "lucide-react"
+import { Eye, EyeOff, Lock, User, Mail } from "lucide-react"
 
 export default function AdminLogin() {
-  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
@@ -25,20 +24,36 @@ export default function AdminLogin() {
     setIsLoading(true)
     setError("")
 
-    // Simulate loading delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const response = await fetch("https://api.tebitainnovations.com/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password
+        }),
+      })
 
-    const user = authenticateUser(username, password)
+      const data = await response.json()
 
-    if (user) {
-      const token = generateToken(user)
-      setStoredToken(token)
-      router.push("/admin/dashboard")
-    } else {
-      setError("Invalid username or password")
+      if (response.ok) {
+        // Store the token (you might want to use a more secure method)
+        localStorage.setItem("authToken", data.token)
+        localStorage.setItem("adminData", JSON.stringify(data.admin))
+        
+        // Redirect to admin dashboard
+        router.push("/admin/dashboard")
+      } else {
+        setError(data.message || "Invalid email or password")
+      }
+    } catch (error) {
+      setError("Network error. Please try again.")
+      console.error("Login error:", error)
+    } finally {
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
   }
 
   return (
@@ -59,17 +74,17 @@ export default function AdminLogin() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-teal-800 font-medium">
-                Username
+              <Label htmlFor="email" className="text-teal-800 font-medium">
+                Email
               </Label>
               <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-teal-500" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-teal-500" />
                 <Input
-                  id="username"
-                  type="text"
-                  placeholder="Enter your username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 border-teal-200 focus:border-primary focus:ring-primary"
                   required
                 />
@@ -125,7 +140,7 @@ export default function AdminLogin() {
 
           <div className="mt-6 text-center">
             <p className="text-sm text-teal-600">
-              Demo credentials: <span className="font-mono bg-teal-50 px-2 py-1 rounded">admin / tebita2024</span>
+              Demo credentials: <span className="font-mono bg-teal-50 px-2 py-1 rounded">admin@tebita.com / admin</span>
             </p>
           </div>
         </CardContent>
