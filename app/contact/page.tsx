@@ -27,11 +27,50 @@ export default function ContactPage() {
     newsletter: false,
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
+  const [errorMessage, setErrorMessage] = useState("")
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
-    // You would typically send this to your backend or email service
+    setIsSubmitting(true)
+    setSubmitStatus("idle")
+    setErrorMessage("")
+
+    try {
+      const response = await fetch("https://api.tebitainnovations.com/api/contact/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        setSubmitStatus("success")
+        // Reset form on successful submission
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          service: "",
+          budget: "",
+          timeline: "",
+          message: "",
+          newsletter: false,
+        })
+      } else {
+        const errorData = await response.json()
+        setSubmitStatus("error")
+        setErrorMessage(errorData.message || "Failed to submit form. Please try again.")
+      }
+    } catch (error) {
+      setSubmitStatus("error")
+      setErrorMessage("Network error. Please check your connection and try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleInputChange = (field: string, value: string | boolean) => {
@@ -64,6 +103,21 @@ export default function ContactPage() {
       {/* Contact Form & Info */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Status Messages */}
+          {submitStatus === "success" && (
+            <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg animate-fade-in">
+              <p className="font-medium">Thank you for your message!</p>
+              <p>We'll get back to you as soon as possible.</p>
+            </div>
+          )}
+
+          {submitStatus === "error" && (
+            <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg animate-fade-in">
+              <p className="font-medium">Error submitting form</p>
+              <p>{errorMessage}</p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Contact Information */}
             <div className="lg:col-span-1 animate-fade-in-left">
@@ -136,6 +190,7 @@ export default function ContactPage() {
                           placeholder="Your full name"
                           className="py-2 px-3"
                           required
+                          disabled={isSubmitting}
                         />
                       </div>
                       <div className="space-y-2">
@@ -148,6 +203,7 @@ export default function ContactPage() {
                           placeholder="your@email.com"
                           className="py-2 px-3"
                           required
+                          disabled={isSubmitting}
                         />
                       </div>
                     </div>
@@ -161,6 +217,7 @@ export default function ContactPage() {
                           onChange={(e) => handleInputChange("phone", e.target.value)}
                           placeholder="+251 911 123 456"
                           className="py-2 px-3"
+                          disabled={isSubmitting}
                         />
                       </div>
                       <div className="space-y-2">
@@ -171,6 +228,7 @@ export default function ContactPage() {
                           onChange={(e) => handleInputChange("company", e.target.value)}
                           placeholder="Your business name"
                           className="py-2 px-3"
+                          disabled={isSubmitting}
                         />
                       </div>
                     </div>
@@ -178,7 +236,11 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="service" className="text-sm font-medium">Service Needed *</Label>
-                        <Select value={formData.service} onValueChange={(value) => handleInputChange("service", value)}>
+                        <Select 
+                          value={formData.service} 
+                          onValueChange={(value) => handleInputChange("service", value)}
+                          disabled={isSubmitting}
+                        >
                           <SelectTrigger className="py-2 px-3">
                             <SelectValue placeholder="Select a service" />
                           </SelectTrigger>
@@ -194,7 +256,11 @@ export default function ContactPage() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="budget" className="text-sm font-medium">Budget Range</Label>
-                        <Select value={formData.budget} onValueChange={(value) => handleInputChange("budget", value)}>
+                        <Select 
+                          value={formData.budget} 
+                          onValueChange={(value) => handleInputChange("budget", value)}
+                          disabled={isSubmitting}
+                        >
                           <SelectTrigger className="py-2 px-3">
                             <SelectValue placeholder="Select budget range" />
                           </SelectTrigger>
@@ -211,7 +277,11 @@ export default function ContactPage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="timeline" className="text-sm font-medium">Project Timeline</Label>
-                      <Select value={formData.timeline} onValueChange={(value) => handleInputChange("timeline", value)}>
+                      <Select 
+                        value={formData.timeline} 
+                        onValueChange={(value) => handleInputChange("timeline", value)}
+                        disabled={isSubmitting}
+                      >
                         <SelectTrigger className="py-2 px-3">
                           <SelectValue placeholder="When do you need this completed?" />
                         </SelectTrigger>
@@ -235,6 +305,7 @@ export default function ContactPage() {
                         rows={4}
                         className="py-2 px-3"
                         required
+                        disabled={isSubmitting}
                       />
                     </div>
 
@@ -244,15 +315,30 @@ export default function ContactPage() {
                         checked={formData.newsletter}
                         onCheckedChange={(checked) => handleInputChange("newsletter", checked as boolean)}
                         className="mt-1"
+                        disabled={isSubmitting}
                       />
                       <Label htmlFor="newsletter" className="text-sm text-muted-foreground leading-tight">
                         Subscribe to our newsletter for web development tips and Ethiopian business insights
                       </Label>
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 py-2">
-                      <Send className="h-4 w-4 mr-2" />
-                      Send Message
+                    <Button 
+                      type="submit" 
+                      size="lg" 
+                      className="w-full bg-primary hover:bg-primary/90 py-2"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4 mr-2" />
+                          Send Message
+                        </>
+                      )}
                     </Button>
                   </form>
                 </CardContent>
