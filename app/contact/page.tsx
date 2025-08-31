@@ -38,7 +38,7 @@ export default function ContactPage() {
     setErrorMessage("")
 
     try {
-      const response = await fetch("https://api.tebitainnovations.com/api/contact/submit", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

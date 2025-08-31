@@ -106,7 +106,7 @@ export default function AdminDashboard() {
 
   const fetchSubmissions = async () => {
     try {
-      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/submissions")
+      const response = await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/submissions`)
       const data: SubmissionsResponse = await response.json()
       setSubmissions(data.submissions)
       setFilteredSubmissions(data.submissions)
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/analytics/overview")
+      const response = await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/analytics/overview`)
       const data: AnalyticsOverview = await response.json()
       setAnalytics(data)
     } catch (error) {
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
 
   const fetchMonthlyStats = async () => {
     try {
-      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/analytics/monthly-stats")
+      const response = await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/analytics/monthly-stats`)
       const data: MonthlyStat[] = await response.json()
       setMonthlyStats(data)
     } catch (error) {
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
 
   const fetchServiceStats = async () => {
     try {
-      const response = await authenticatedFetch("https://api.tebitainnovations.com/api/admin/analytics/service-stats")
+      const response = await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/analytics/service-stats`)
       const data: ServiceStat[] = await response.json()
       setServiceStats(data)
     } catch (error) {
