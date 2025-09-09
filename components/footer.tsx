@@ -22,27 +22,36 @@ export function Footer() {
               businesses grow and thrive in the digital age.
             </p>
             <div className="flex space-x-4">
+              <Link target="_blank" href='https://web.facebook.com/profile.php?id=61580406096564'>
               <Button
                 variant="ghost"
                 size="sm"
                 className="text-secondary-foreground/80 hover:text-secondary-foreground"
               >
+                
                 <Facebook className="h-4 w-4" />
               </Button>
+                </Link>
+                <Link target="_blank" href='https://t.me/Tebita_Innovations'>
               <Button
                 variant="ghost"
                 size="sm"
                 className="text-secondary-foreground/80 hover:text-secondary-foreground"
               >
-                <Twitter className="h-4 w-4" />
+                <Image src='/telegram.svg' width={16} height={16} alt="" />
+                {/* <Twitter className="h-4 w-4" /> */}
               </Button>
+                </Link>
+                <Link target="_blank" href='https://www.linkedin.com/company/tebita-innovations/'>
               <Button
                 variant="ghost"
                 size="sm"
                 className="text-secondary-foreground/80 hover:text-secondary-foreground"
               >
-                <Linkedin className="h-4 w-4" />
+               <Linkedin className="h-4 w-4" />
               </Button>
+               </Link> 
+               <Link target="_blank" href='https://www.instagram.com/tebita_innovations?igsh=MW1kNnAzdXAwYnNvdA=='>
               <Button
                 variant="ghost"
                 size="sm"
@@ -50,6 +59,7 @@ export function Footer() {
               >
                 <Instagram className="h-4 w-4" />
               </Button>
+                </Link>
             </div>
           </div>
 
@@ -141,7 +151,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4" />
-                <span className="text-secondary-foreground/80">+251 911 123 456</span>
+                <span className="text-secondary-foreground/80">+251 963798300</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />

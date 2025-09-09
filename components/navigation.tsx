@@ -36,7 +36,7 @@ export function Navigation() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Image src={isScrolled ? "/logo.svg" : "/logo.png"} alt="Tebita Innovations" width={120} height={40} className="h-8 w-auto" />
+            <Image src="/logo.png" alt="Tebita Innovations" width={120} height={40} className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -95,14 +95,14 @@ export function Navigation() {
             <div className="px-2 pt-2 pb-3 space-y-1 bg-background/95 backdrop-blur-md rounded-lg mt-2">
               <Link
                 href="/"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors"
+                className="block px-3 py-2 text-black hover:text-primary transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Home
               </Link>
               <Link
                 href="/about"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors"
+                className="block px-3 py-2 text-black hover:text-primary transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 About
@@ -110,7 +110,7 @@ export function Navigation() {
 
               {/* Mobile Services */}
               <div className="px-3 py-2">
-                <div className="text-white font-medium mb-2">Services</div>
+                <div className="text-black font-medium mb-2">Services</div>
                 {services.map((service) => (
                   <Link
                     key={service.href}
@@ -123,23 +123,23 @@ export function Navigation() {
                 ))}
               </div>
 
-              <Link
+              {/* <Link
                 href="/portfolio"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors"
+                className="block px-3 py-2 text-black hover:text-primary transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Portfolio
-              </Link>
+              </Link> */}
               <Link
                 href="/faq"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors"
+                className="block px-3 py-2 text-black hover:text-primary transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 FAQ
               </Link>
               <Link
                 href="/contact"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors"
+                className="block px-3 py-2 text-black hover:text-primary transition-colors"
                 onClick={() => setIsOpen(false)}
               >
                 Contact
